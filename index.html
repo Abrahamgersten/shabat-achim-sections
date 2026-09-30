@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>בחירת מדורים - שבת אחים</title>
+<meta name="description" content="דוגמאות אמיתיות לכל המדורים של עלון פרשת השבוע 'שבת אחים'. בוחרים מדורים לעלון של בית הספר, אפשר גם לדרג את העלון לפי שכבות גיל, ומחליפים מתי שרוצים.">
+<meta name="theme-color" content="#142c56">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="icons/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="בחירת מדורים">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="בחירת מדורים - שבת אחים">
+<meta property="og:description" content="דוגמאות אמיתיות לכל המדורים. בוחרים מה שמתאים לתלמידים שלכם, ומחליפים מתי שרוצים.">
+<meta property="og:image" content="https://abrahamgersten.github.io/shabat-achim-sections/og-image.jpg">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+
+<a class="skip-link" href="#main">דלגו לתוכן הראשי</a>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a href="./" class="brand">
+      <img src="assets/img/logo.webp" alt="שבת אחים - עלון פרשת שבוע" width="104" height="58">
+      <span class="brand-name">בחירת מדורים</span>
+    </a>
+    <button class="btn btn-install" id="installBtn" type="button" hidden>התקנה<span class="wide-only">כאפליקציה</span></button>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>בוחרים את המדורים לעלון שלכם</h1>
+        <p class="hero-sub">דוגמאות אמיתיות לכל המדורים. בוחרים מה שמתאים לתלמידים שלכם, ומחליפים מתי שרוצים.</p>
+        <a href="#catalog" class="btn btn-primary btn-lg">לדוגמאות ולבחירה</a>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <img class="fan fan-1" src="assets/sections/section-12.webp" alt="" width="687" height="737">
+        <img class="fan fan-2" src="assets/sections/section-05.webp" alt="" width="867" height="687">
+        <img class="fan fan-3" src="assets/sections/section-16.webp" alt="" width="617" height="827">
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="welcome" id="welcomeBack" role="status" hidden>
+      <p class="welcome-title">שלום שוב, <span id="welcomeSchool"></span></p>
+      <p id="welcomeText">הבחירה האחרונה שלכם מסומנת כאן למטה. אפשר לשנות אותה ולשלוח שוב.</p>
+    </div>
+  </div>
+
+  <section class="band how" aria-labelledby="howTitle">
+    <div class="wrap how-row">
+      <h2 id="howTitle" class="how-title">איך זה עובד?</h2>
+      <ol class="how-steps">
+        <li><strong>מתרשמים</strong> מהדוגמאות. לחיצה על תמונה מגדילה אותה.</li>
+        <li><strong>מסמנים</strong> עד 4 מדורים, או מדרגים את העלון לפי שכבות גיל.</li>
+        <li><strong>שולחים</strong> לנו את הבחירה, ואנחנו מעדכנים את העלון שלכם.</li>
+      </ol>
+      <p class="how-note">רק מתרשמים? אין צורך למלא שום פרטים.</p>
+    </div>
+  </section>
+
+  <section class="section structure" id="structure" aria-labelledby="structureTitle">
+    <div class="wrap">
+      <h2 class="section-title" id="structureTitle">עלון אחד לכולם, או עלון לכל שכבה?</h2>
+      <p class="section-lede">אפשר לדרג את העלון לפי שכבות גיל: עלון נפרד לכיתות א'-ב' ולכיתות ג'-ו', עם מדורים שונים לכל שכבה. הדירוג כרוך בתוספת עלות שנתית קלה.</p>
+      <div class="structure-choice" role="radiogroup" aria-labelledby="structureTitle">
+        <label class="structure-option">
+          <input type="radio" name="structure" value="unified" checked>
+          <span class="structure-card">
+            <span class="structure-name">עלון אחיד לכל הכיתות</span>
+            <span class="structure-hint">עד 4 מדורים לכל בית הספר</span>
+          </span>
+        </label>
+        <label class="structure-option">
+          <input type="radio" name="structure" value="tiered">
+          <span class="structure-card">
+            <span class="structure-name">עלון מדורג לפי שכבות גיל</span>
+            <span class="structure-hint">עד 4 מדורים לא'-ב', ועד 4 לג'-ו'</span>
+          </span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <section class="section catalog" id="catalog" aria-labelledby="catalogTitle">
+    <div class="wrap wrap-wide">
+      <h2 class="section-title" id="catalogTitle">כל המדורים, עם דוגמאות אמיתיות</h2>
+      <p class="section-lede" id="catalogLede">כל הדוגמאות לקוחות מעלונים שהפקנו לבתי ספר. לחצו על תמונה כדי להגדיל אותה, ועל "בחירה" כדי לסמן מדור.</p>
+      <div class="counters" id="counters" aria-live="polite"></div>
+      <div id="catalogGroups"></div>
+    </div>
+  </section>
+
+  <section class="section send" id="send" aria-labelledby="sendTitle">
+    <div class="wrap">
+      <h2 class="section-title" id="sendTitle">שליחת הבחירה שלכם</h2>
+
+      <div class="send-empty" id="sendEmpty">
+        <p class="send-empty-title">עדיין לא בחרתם מדורים</p>
+        <p>סמנו מדורים בדוגמאות למעלה, או בחרו עלון מדורג לפי שכבות גיל. הפרטים של בית הספר נדרשים רק כששולחים בחירה.</p>
+        <a href="#catalog" class="btn btn-outline">חזרה לדוגמאות</a>
+      </div>
+
+      <form class="send-form" id="sendForm" novalidate hidden>
+        <div class="summary" id="summary" aria-live="polite"></div>
+
+        <p class="form-intro">כדי שנדע לאיזה עלון לעדכן את הבחירה, נבקש כמה פרטים על בית הספר.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="f_school">שם בית הספר <span class="req" aria-hidden="true">*</span></label>
+            <input id="f_school" name="school" type="text" autocomplete="organization" required aria-describedby="f_school_err">
+            <p class="field-error" id="f_school_err" hidden>נא לכתוב את שם בית הספר.</p>
+          </div>
+          <div class="field">
+            <label for="f_city">יישוב <span class="opt">(לא חובה)</span></label>
+            <input id="f_city" name="city" type="text" autocomplete="address-level2">
+          </div>
+          <div class="field">
+            <label for="f_name">שם איש/אשת הקשר <span class="req" aria-hidden="true">*</span></label>
+            <input id="f_name" name="contactName" type="text" autocomplete="name" required aria-describedby="f_name_err">
+            <p class="field-error" id="f_name_err" hidden>נא לכתוב שם.</p>
+          </div>
+          <div class="field">
+            <label for="f_role">תפקיד <span class="opt">(לא חובה)</span></label>
+            <input id="f_role" name="role" type="text" placeholder="לדוגמה: מנהל/ת, רכז/ת">
+          </div>
+          <div class="field">
+            <label for="f_phone">טלפון <span class="req" aria-hidden="true">*</span></label>
+            <input id="f_phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" required aria-describedby="f_phone_err">
+            <p class="field-error" id="f_phone_err" hidden>נא לכתוב מספר טלפון תקין, לדוגמה 050-1234567.</p>
+          </div>
+          <div class="field field-wide">
+            <label for="f_notes">הערות <span class="opt">(לא חובה)</span></label>
+            <textarea id="f_notes" name="notes" rows="3"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg btn-submit" type="submit">שליחת הבחירה</button>
+        <p class="form-error" id="formError" role="alert" hidden></p>
+      </form>
+
+      <div class="send-success" id="sendSuccess" tabindex="-1" hidden>
+        <p class="success-title">תודה, הבחירה נשלחה</p>
+        <p id="successText">קיבלנו את הבחירה שלכם ונעדכן את העלון בהתאם.</p>
+        <div class="success-link">
+          <p><strong>שמרו את הקישור האישי שלכם.</strong> מתי שתרצו להחליף מדורים, פותחים אותו, משנים ושולחים שוב. הבחירה האחרונה שלכם תחכה שם.</p>
+          <div class="link-row">
+            <input id="personalLink" type="text" readonly dir="ltr" aria-label="הקישור האישי שלכם">
+            <button class="btn btn-navy" type="button" id="copyLinkBtn">העתקת הקישור</button>
+            <button class="btn btn-outline" type="button" id="shareLinkBtn">שליחה לעצמי</button>
+          </div>
+        </div>
+        <button class="btn-text" type="button" id="editAgainBtn">לשינוי הבחירה</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section keep" id="keep" aria-labelledby="keepTitle">
+    <div class="wrap keep-grid">
+      <div class="keep-copy">
+        <h2 class="keep-title" id="keepTitle">חוזרים לכאן מתי שרוצים</h2>
+        <p>שמרו את הקישור לאתר, או התקינו אותו בטלפון כאפליקציה בשם "בחירת מדורים - שבת אחים". בכל פעם שתרצו לרענן את העלון, נכנסים, מחליפים מדורים ושולחים.</p>
+      </div>
+      <div class="keep-how">
+        <p class="keep-how-title">התקנה כאפליקציה</p>
+        <ul>
+          <li><strong>אנדרואיד:</strong> כפתור "התקנה" בראש העמוד, או בתפריט של כרום: "הוספה למסך הבית".</li>
+          <li><strong>אייפון:</strong> בספארי לוחצים על כפתור השיתוף, ואז "הוספה למסך הבית".</li>
+          <li><strong>מחשב:</strong> בכרום או באדג', סמל ההתקנה בשורת הכתובת.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p>שבת אחים - עלון פרשת שבוע אישי לבתי ספר</p>
+    <p>שאלות? כתבו לנו: <a href="mailto:abrahamgersten@gmail.com">abrahamgersten@gmail.com</a></p>
+  </div>
+</footer>
+
+<div class="selbar" id="selbar" hidden>
+  <div class="wrap selbar-row">
+    <p class="selbar-text" id="selbarText"></p>
+    <a href="#send" class="btn btn-primary">להמשך ושליחה</a>
+  </div>
+</div>
+
+<dialog class="lightbox" id="lightbox" aria-labelledby="lbTitle">
+  <div class="lb-inner">
+    <div class="lb-head">
+      <p class="lb-title" id="lbTitle"></p>
+      <button class="lb-close" type="button" id="lbClose" aria-label="סגירה">×</button>
+    </div>
+    <div class="lb-stage">
+      <img id="lbImg" src="data:," alt="">
+    </div>
+    <div class="lb-foot">
+      <div class="lb-nav" id="lbNav">
+        <button class="btn btn-outline btn-sm" type="button" id="lbPrev" aria-label="הדוגמה הקודמת">הקודמת</button>
+        <span class="lb-count" id="lbCount"></span>
+        <button class="btn btn-outline btn-sm" type="button" id="lbNext" aria-label="הדוגמה הבאה">הבאה</button>
+      </div>
+      <div class="lb-actions" id="lbActions"></div>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="ios-dialog" id="iosDialog" aria-labelledby="iosTitle">
+  <p class="ios-title" id="iosTitle">התקנה באייפון</p>
+  <ol>
+    <li>פותחים את האתר בספארי.</li>
+    <li>לוחצים על כפתור השיתוף (ריבוע עם חץ למעלה).</li>
+    <li>בוחרים "הוספה למסך הבית", ואז "הוסף".</li>
+  </ol>
+  <button class="btn btn-navy" type="button" id="iosClose">הבנתי</button>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="js/data.js?v=1"></script>
+<script src="js/app.js?v=1"></script>
+</body>
+</html>
