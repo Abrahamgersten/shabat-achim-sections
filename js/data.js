@@ -226,12 +226,12 @@ window.SECTIONS_DATA = {
    "desc": "ידע קצר על בריאות ושמירה על הגוף.",
    "group": "world",
    "imgs": [
-    "sec-bari-c9a475e5"
+    "sec-bari-54b67b1b"
    ],
    "sizes": [
     [
      1000,
-     1292
+     1307
     ]
    ]
   },
