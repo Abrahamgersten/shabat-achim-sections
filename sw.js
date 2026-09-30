@@ -1,5 +1,6 @@
 /* service worker - בחירת מדורים. Bump VERSION on every deploy so clients pick up the new files. */
-const VERSION = "sections-v1";
+const PREFIX = "shabat-achim-sections-"; // every GitHub Pages site of this account shares one origin: only ever touch our own caches
+const VERSION = PREFIX + "v2";
 const PRECACHE = [
   "./",
   "index.html",
@@ -41,7 +42,7 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+    caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith(PREFIX) && k !== VERSION).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
