@@ -90,12 +90,12 @@ window.SECTIONS_DATA = {
    "desc": "תפזורת מילים על פרשת השבוע.",
    "group": "torah",
    "imgs": [
-    "section-17"
+    "sec-tifzoret-20260930-1"
    ],
    "sizes": [
     [
-     861,
-     596
+     1000,
+     1306
     ]
    ]
   },
@@ -105,17 +105,12 @@ window.SECTIONS_DATA = {
    "desc": "שאלות ותשובות ביהדות.",
    "group": "torah",
    "imgs": [
-    "section-18",
-    "section-19"
+    "sec-yesh-li-musag-20260930-1"
    ],
    "sizes": [
     [
-     900,
-     536
-    ],
-    [
-     647,
-     737
+     1000,
+     1307
     ]
    ]
   },
@@ -125,13 +120,13 @@ window.SECTIONS_DATA = {
    "desc": "סיפור ושאלות לדיון משפחתי סביב שולחן השבת.",
    "group": "stories",
    "imgs": [
-    "section-05"
+    "sec-misaviv-20260930-1"
    ],
    "recommended": true,
    "sizes": [
     [
-     867,
-     687
+     1000,
+     998
     ]
    ]
   },
@@ -216,12 +211,12 @@ window.SECTIONS_DATA = {
    "desc": "הסבר מדעי פשוט לשאלות מהעולם שסביבנו.",
    "group": "world",
    "imgs": [
-    "section-21"
+    "sec-or-behaskala-20260930-1"
    ],
    "sizes": [
     [
-     900,
-     557
+     1000,
+     1196
     ]
    ]
   },
@@ -296,12 +291,12 @@ window.SECTIONS_DATA = {
    "desc": "הצעה לפעילות משפחתית.",
    "group": "play",
    "imgs": [
-    "section-22"
+    "sec-ma-laasot-20260930-1"
    ],
    "sizes": [
     [
-     611,
-     687
+     1000,
+     1224
     ]
    ]
   }

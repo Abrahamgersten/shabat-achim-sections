@@ -420,3 +420,4 @@ body:not(.has-selbar) .toast { bottom: 24px; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+.btn-install { gap: 5px; }
