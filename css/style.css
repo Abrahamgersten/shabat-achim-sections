@@ -236,6 +236,7 @@ body.has-selbar { padding-bottom: 88px; }
 .counter.tier-young.is-full { background: var(--leaf); color: #fff; border-color: var(--leaf); }
 
 .sec-group { margin-top: 30px; }
+.sec-grid-all { margin-top: 18px; }
 .sec-group-title { font-size: 1.2rem; font-weight: 800; color: var(--heading); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--sky-mid); }
 .sec-grid { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (min-width: 700px) { .sec-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }

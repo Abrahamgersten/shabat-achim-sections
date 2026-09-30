@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 
@@ -121,11 +121,12 @@
       <form class="send-form" id="sendForm" novalidate hidden>
         <div class="summary" id="summary" aria-live="polite"></div>
 
-        <p class="form-intro">כדי שנדע לאיזה עלון לעדכן את הבחירה, כדאי לכתוב את שם בית הספר. כל השדות אינם חובה.</p>
+        <p class="form-intro">כדי שנדע לאיזה עלון לעדכן את הבחירה, נבקש את שם בית הספר.</p>
         <div class="fields">
           <div class="field">
-            <label for="f_school">שם בית הספר <span class="opt">(לא חובה)</span></label>
-            <input id="f_school" name="school" type="text" autocomplete="organization">
+            <label for="f_school">שם בית הספר <span class="req" aria-hidden="true">*</span></label>
+            <input id="f_school" name="school" type="text" autocomplete="organization" required aria-describedby="f_school_err">
+            <p class="field-error" id="f_school_err" hidden>נא לכתוב את שם בית הספר.</p>
           </div>
           <div class="field">
             <label for="f_name">שם הממלא/ת <span class="opt">(לא חובה)</span></label>
@@ -221,7 +222,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="js/data.js?v=7"></script>
-<script src="js/app.js?v=7"></script>
+<script src="js/data.js?v=8"></script>
+<script src="js/app.js?v=8"></script>
 </body>
 </html>

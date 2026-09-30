@@ -141,17 +141,10 @@
   }
 
   function renderCatalog() {
+    // one grid, no group headings (Avraham, 2026-10-01); order follows catalog.json
     var root = $("catalogGroups");
-    D.groups.forEach(function (g) {
-      var items = D.sections.filter(function (s) { return s.group === g.id; });
-      if (!items.length) return;
-      var wrap = el("section", "sec-group");
-      wrap.setAttribute("aria-labelledby", "grp-" + g.id);
-      var h = el("h3", "sec-group-title", g.title);
-      h.id = "grp-" + g.id;
-      wrap.appendChild(h);
-      var grid = el("div", "sec-grid");
-      items.forEach(function (s) {
+    var grid = el("div", "sec-grid sec-grid-all");
+    D.sections.forEach(function (s) {
         var card = el("article", "sec-card");
         card.id = "sec-" + s.key;
         card.setAttribute("data-key", s.key);
@@ -170,7 +163,7 @@
         thumb.appendChild(img);
 
         var body = el("div", "sec-body");
-        var name = el("h4", "sec-name", s.name);
+        var name = el("h3", "sec-name", s.name);
         if (s.recommended) name.appendChild(el("span", "sec-tag", "מומלץ"));
         body.appendChild(name);
         body.appendChild(el("p", "sec-desc", s.desc));
@@ -188,10 +181,8 @@
         card.appendChild(thumb);
         card.appendChild(body);
         grid.appendChild(card);
-      });
-      wrap.appendChild(grid);
-      root.appendChild(wrap);
     });
+    root.appendChild(grid);
   }
 
   /* ---------------- sync UI with state ---------------- */
@@ -399,9 +390,15 @@
     input.value = profile[f[0]] || "";
     input.addEventListener("input", function () {
       profile[f[0]] = input.value;
+      if (input.id === "f_school" && input.value.trim()) showSchoolError(false);
       persistDraft();
     });
   });
+
+  function showSchoolError(on) {
+    $("f_school").setAttribute("aria-invalid", on ? "true" : "false");
+    $("f_school_err").hidden = !on;
+  }
 
   function setBusy(busy) {
     var b = form.querySelector(".btn-submit");
@@ -412,6 +409,11 @@
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     $("formError").hidden = true;
+    if (!$("f_school").value.trim()) {
+      showSchoolError(true);
+      $("f_school").focus();
+      return;
+    }
     if (!navigator.onLine) {
       showError("נראה שאין כרגע חיבור לאינטרנט. הבחירה שמורה אצלכם, ואפשר לשלוח שוב כשהחיבור יחזור.");
       return;

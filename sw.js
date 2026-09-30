@@ -1,19 +1,18 @@
 /* service worker - בחירת מדורים. Bump VERSION on every deploy so clients pick up the new files. */
 const PREFIX = "shabat-achim-sections-"; // every GitHub Pages site of this account shares one origin: only ever touch our own caches
-const VERSION = PREFIX + "v8";
+const VERSION = PREFIX + "v9";
 const PRECACHE = [
   "./",
   "index.html",
-  "css/style.css?v=7",
-  "js/data.js?v=7",
-  "js/app.js?v=7",
+  "css/style.css?v=8",
+  "js/data.js?v=8",
+  "js/app.js?v=8",
   "manifest.webmanifest",
   "assets/img/logo.webp",
   "apple-touch-icon.png",
   "icons/icon-192.png",
   "icons/favicon-32.png",
   "assets/sections/sec-bari-54b67b1b.webp",
-  "assets/sections/sec-chidot-tmunot-0a82ad9d.webp",
   "assets/sections/sec-ma-laasot-20260930-1.webp",
   "assets/sections/sec-misaviv-20260930-1.webp",
   "assets/sections/sec-or-behaskala-20260930-1.webp",
@@ -21,6 +20,7 @@ const PRECACHE = [
   "assets/sections/sec-yesh-li-musag-20260930-1.webp",
   "assets/sections/section-01.webp",
   "assets/sections/section-02.webp",
+  "assets/sections/section-03.webp",
   "assets/sections/section-04.webp",
   "assets/sections/section-06.webp",
   "assets/sections/section-07.webp",

@@ -75,12 +75,12 @@ window.SECTIONS_DATA = {
    "desc": "חידה בתמונות על הפרשה.",
    "group": "torah",
    "imgs": [
-    "sec-chidot-tmunot-0a82ad9d"
+    "section-03"
    ],
    "sizes": [
     [
-     1000,
-     388
+     587,
+     691
     ]
    ]
   },
