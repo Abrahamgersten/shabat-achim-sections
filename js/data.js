@@ -310,10 +310,7 @@ window.SECTIONS_DATA = {
   "action": "https://docs.google.com/forms/d/e/1FAIpQLSdPANBLRiNeaZMfvZCAaIuNYWynpbkyM08vSdu7URK6Ef9IXA/formResponse",
   "entries": {
    "school": "entry.1309888151",
-   "city": "entry.1388222644",
    "contactName": "entry.634297929",
-   "role": "entry.1496533600",
-   "phone": "entry.573579859",
    "structure": "entry.387763023",
    "sectionsUnified": "entry.187764112",
    "sectionsYoung": "entry.1814055414",

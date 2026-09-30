@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=1">
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
 
@@ -60,7 +60,7 @@
 
   <div class="wrap">
     <div class="welcome" id="welcomeBack" role="status" hidden>
-      <p class="welcome-title">שלום שוב, <span id="welcomeSchool"></span></p>
+      <p class="welcome-title">שלום שוב<span id="welcomeSchool"></span></p>
       <p id="welcomeText">הבחירה האחרונה שלכם מסומנת כאן למטה. אפשר לשנות אותה ולשלוח שוב.</p>
     </div>
   </div>
@@ -115,37 +115,22 @@
 
       <div class="send-empty" id="sendEmpty">
         <p class="send-empty-title">עדיין לא בחרתם מדורים</p>
-        <p>סמנו מדורים בדוגמאות למעלה, או בחרו עלון מדורג לפי שכבות גיל. הפרטים של בית הספר נדרשים רק כששולחים בחירה.</p>
+        <p>סמנו מדורים בדוגמאות למעלה, או בחרו עלון מדורג לפי שכבות גיל. רק כששולחים בחירה, נבקש את שם בית הספר.</p>
         <a href="#catalog" class="btn btn-outline">חזרה לדוגמאות</a>
       </div>
 
       <form class="send-form" id="sendForm" novalidate hidden>
         <div class="summary" id="summary" aria-live="polite"></div>
 
-        <p class="form-intro">כדי שנדע לאיזה עלון לעדכן את הבחירה, נבקש כמה פרטים על בית הספר.</p>
+        <p class="form-intro">כדי שנדע לאיזה עלון לעדכן את הבחירה, כדאי לכתוב את שם בית הספר. כל השדות אינם חובה.</p>
         <div class="fields">
           <div class="field">
-            <label for="f_school">שם בית הספר <span class="req" aria-hidden="true">*</span></label>
-            <input id="f_school" name="school" type="text" autocomplete="organization" required aria-describedby="f_school_err">
-            <p class="field-error" id="f_school_err" hidden>נא לכתוב את שם בית הספר.</p>
+            <label for="f_school">שם בית הספר <span class="opt">(לא חובה)</span></label>
+            <input id="f_school" name="school" type="text" autocomplete="organization">
           </div>
           <div class="field">
-            <label for="f_city">יישוב <span class="opt">(לא חובה)</span></label>
-            <input id="f_city" name="city" type="text" autocomplete="address-level2">
-          </div>
-          <div class="field">
-            <label for="f_name">שם איש/אשת הקשר <span class="req" aria-hidden="true">*</span></label>
-            <input id="f_name" name="contactName" type="text" autocomplete="name" required aria-describedby="f_name_err">
-            <p class="field-error" id="f_name_err" hidden>נא לכתוב שם.</p>
-          </div>
-          <div class="field">
-            <label for="f_role">תפקיד <span class="opt">(לא חובה)</span></label>
-            <input id="f_role" name="role" type="text" placeholder="לדוגמה: מנהל/ת, רכז/ת">
-          </div>
-          <div class="field">
-            <label for="f_phone">טלפון <span class="req" aria-hidden="true">*</span></label>
-            <input id="f_phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" required aria-describedby="f_phone_err">
-            <p class="field-error" id="f_phone_err" hidden>נא לכתוב מספר טלפון תקין, לדוגמה 050-1234567.</p>
+            <label for="f_name">שם הממלא/ת <span class="opt">(לא חובה)</span></label>
+            <input id="f_name" name="contactName" type="text" autocomplete="name">
           </div>
           <div class="field field-wide">
             <label for="f_notes">הערות <span class="opt">(לא חובה)</span></label>
@@ -237,7 +222,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="js/data.js?v=1"></script>
-<script src="js/app.js?v=1"></script>
+<script src="js/data.js?v=2"></script>
+<script src="js/app.js?v=2"></script>
 </body>
 </html>

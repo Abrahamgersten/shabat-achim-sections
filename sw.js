@@ -1,12 +1,12 @@
 /* service worker - בחירת מדורים. Bump VERSION on every deploy so clients pick up the new files. */
 const PREFIX = "shabat-achim-sections-"; // every GitHub Pages site of this account shares one origin: only ever touch our own caches
-const VERSION = PREFIX + "v2";
+const VERSION = PREFIX + "v3";
 const PRECACHE = [
   "./",
   "index.html",
-  "css/style.css?v=1",
-  "js/data.js?v=1",
-  "js/app.js?v=1",
+  "css/style.css?v=2",
+  "js/data.js?v=2",
+  "js/app.js?v=2",
   "manifest.webmanifest",
   "assets/img/logo.webp",
   "apple-touch-icon.png",

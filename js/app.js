@@ -50,14 +50,14 @@
     return out;
   }
   function snapshotToLink(s) {
-    return { v: 1, i: s.id, s: s.school, c: s.city, n: s.contactName, r: s.role, p: s.phone,
+    return { v: 1, i: s.id, s: s.school, n: s.contactName,
       t: s.structure === "tiered" ? "t" : "u", u: s.u, y: s.y, o: s.o, d: s.sentAt };
   }
   function linkToSnapshot(o) {
     if (!o || o.v !== 1) return null;
     return {
-      id: String(o.i || ""), school: String(o.s || ""), city: String(o.c || ""), contactName: String(o.n || ""),
-      role: String(o.r || ""), phone: String(o.p || ""), structure: o.t === "t" ? "tiered" : "unified",
+      id: String(o.i || ""), school: String(o.s || ""), contactName: String(o.n || ""),
+      structure: o.t === "t" ? "tiered" : "unified",
       u: cleanKeys(o.u), y: cleanKeys(o.y), o: cleanKeys(o.o), sentAt: String(o.d || "")
     };
   }
@@ -77,7 +77,7 @@
   if (hashMatch) {
     try {
       var fromLink = linkToSnapshot(b64urlDecode(hashMatch[1]));
-      if (fromLink && fromLink.school) {
+      if (fromLink && fromLink.id) {
         var sameSchool = lastSent && lastSent.id === fromLink.id;
         var newer = !lastSent || !sameSchool || (fromLink.sentAt || "") >= (lastSent.sentAt || "");
         if (newer) {
@@ -90,9 +90,8 @@
   }
 
   var profile = store.profile || (lastSent ? {
-    id: lastSent.id, school: lastSent.school, city: lastSent.city, contactName: lastSent.contactName,
-    role: lastSent.role, phone: lastSent.phone
-  } : { id: "", school: "", city: "", contactName: "", role: "", phone: "" });
+    id: lastSent.id, school: lastSent.school, contactName: lastSent.contactName
+  } : { id: "", school: "", contactName: "" });
 
   var base = store.draft || lastSent;
   var state = {
@@ -394,29 +393,15 @@
 
   /* ---------------- form ---------------- */
   var form = $("sendForm");
-  var FIELDS = [["school", "f_school"], ["city", "f_city"], ["contactName", "f_name"], ["role", "f_role"], ["phone", "f_phone"]];
+  var FIELDS = [["school", "f_school"], ["contactName", "f_name"]];
   FIELDS.forEach(function (f) {
     var input = $(f[1]);
     input.value = profile[f[0]] || "";
     input.addEventListener("input", function () {
       profile[f[0]] = input.value;
-      if (input.getAttribute("aria-invalid") === "true") validateField(input);
       persistDraft();
     });
   });
-
-  function phoneOk(v) {
-    var digits = String(v || "").replace(/\D/g, "");
-    if (digits.indexOf("972") === 0) digits = "0" + digits.slice(3);
-    return /^0\d{8,9}$/.test(digits);
-  }
-  function validateField(input) {
-    var ok = input.id === "f_phone" ? phoneOk(input.value) : input.value.trim().length > 1;
-    input.setAttribute("aria-invalid", ok ? "false" : "true");
-    var err = $(input.id + "_err");
-    if (err) err.hidden = ok;
-    return ok;
-  }
 
   function setBusy(busy) {
     var b = form.querySelector(".btn-submit");
@@ -427,10 +412,6 @@
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     $("formError").hidden = true;
-    var required = [$("f_school"), $("f_name"), $("f_phone")];
-    var firstBad = null;
-    required.forEach(function (i) { if (!validateField(i) && !firstBad) firstBad = i; });
-    if (firstBad) { firstBad.focus(); return; }
     if (!navigator.onLine) {
       showError("נראה שאין כרגע חיבור לאינטרנט. הבחירה שמורה אצלכם, ואפשר לשלוח שוב כשהחיבור יחזור.");
       return;
@@ -440,10 +421,7 @@
     var E = D.form.entries;
     var fd = new FormData();
     fd.append(E.school, $("f_school").value.trim());
-    fd.append(E.city, $("f_city").value.trim());
     fd.append(E.contactName, $("f_name").value.trim());
-    fd.append(E.role, $("f_role").value.trim());
-    fd.append(E.phone, $("f_phone").value.trim());
     fd.append(E.structure, state.structure === "tiered" ? D.tiers.tiered : D.tiers.unified);
     if (state.structure === "tiered") {
       namesOf(state.y).forEach(function (n) { fd.append(E.sectionsYoung, n); });
@@ -476,8 +454,7 @@
   function onSent() {
     setBusy(false);
     lastSent = {
-      id: profile.id, school: $("f_school").value.trim(), city: $("f_city").value.trim(),
-      contactName: $("f_name").value.trim(), role: $("f_role").value.trim(), phone: $("f_phone").value.trim(),
+      id: profile.id, school: $("f_school").value.trim(), contactName: $("f_name").value.trim(),
       structure: state.structure, u: state.u.slice(), y: state.y.slice(), o: state.o.slice(),
       sentAt: new Date().toISOString()
     };
@@ -488,7 +465,9 @@
     var url = personalUrl(lastSent);
     try { history.replaceState(null, "", "#s=" + url.split("#s=")[1]); } catch (e) { /* ignore */ }
     $("personalLink").value = url;
-    $("successText").textContent = "קיבלנו את הבחירה של " + lastSent.school + ", ונעדכן את העלון בהתאם.";
+    $("successText").textContent = lastSent.school
+      ? "קיבלנו את הבחירה של " + lastSent.school + ", ונעדכן את העלון בהתאם."
+      : "קיבלנו את הבחירה שלכם, ונעדכן את העלון בהתאם.";
     form.hidden = true;
     $("sendEmpty").hidden = true;
     $("sendSuccess").hidden = false;
@@ -527,8 +506,8 @@
 
   /* ---------------- welcome back ---------------- */
   function showWelcome() {
-    if (!lastSent || !lastSent.school) return;
-    $("welcomeSchool").textContent = lastSent.school;
+    if (!lastSent || !lastSent.sentAt) return;
+    $("welcomeSchool").textContent = lastSent.school ? ", " + lastSent.school : "";
     var when = "";
     try { when = new Date(lastSent.sentAt).toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { /* ignore */ }
     $("welcomeText").textContent = (when ? "הבחירה ששלחתם ב-" + when : "הבחירה האחרונה ששלחתם") + " מסומנת כאן למטה. אפשר לשנות אותה ולשלוח שוב, מתי שתרצו.";
