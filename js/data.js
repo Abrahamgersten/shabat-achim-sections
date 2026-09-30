@@ -75,12 +75,12 @@ window.SECTIONS_DATA = {
    "desc": "חידה בתמונות על הפרשה.",
    "group": "torah",
    "imgs": [
-    "section-03"
+    "sec-chidot-tmunot-0a82ad9d"
    ],
    "sizes": [
     [
-     587,
-     691
+     1000,
+     388
     ]
    ]
   },
@@ -226,17 +226,12 @@ window.SECTIONS_DATA = {
    "desc": "ידע קצר על בריאות ושמירה על הגוף.",
    "group": "world",
    "imgs": [
-    "section-11",
-    "section-10"
+    "sec-bari-c9a475e5"
    ],
    "sizes": [
     [
-     682,
-     802
-    ],
-    [
-     607,
-     697
+     1000,
+     1292
     ]
    ]
   },

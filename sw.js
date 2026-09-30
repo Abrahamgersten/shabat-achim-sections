@@ -1,17 +1,19 @@
 /* service worker - בחירת מדורים. Bump VERSION on every deploy so clients pick up the new files. */
 const PREFIX = "shabat-achim-sections-"; // every GitHub Pages site of this account shares one origin: only ever touch our own caches
-const VERSION = PREFIX + "v6";
+const VERSION = PREFIX + "v7";
 const PRECACHE = [
   "./",
   "index.html",
-  "css/style.css?v=5",
-  "js/data.js?v=5",
-  "js/app.js?v=5",
+  "css/style.css?v=6",
+  "js/data.js?v=6",
+  "js/app.js?v=6",
   "manifest.webmanifest",
   "assets/img/logo.webp",
   "apple-touch-icon.png",
   "icons/icon-192.png",
   "icons/favicon-32.png",
+  "assets/sections/sec-bari-c9a475e5.webp",
+  "assets/sections/sec-chidot-tmunot-0a82ad9d.webp",
   "assets/sections/sec-ma-laasot-20260930-1.webp",
   "assets/sections/sec-misaviv-20260930-1.webp",
   "assets/sections/sec-or-behaskala-20260930-1.webp",
@@ -19,14 +21,11 @@ const PRECACHE = [
   "assets/sections/sec-yesh-li-musag-20260930-1.webp",
   "assets/sections/section-01.webp",
   "assets/sections/section-02.webp",
-  "assets/sections/section-03.webp",
   "assets/sections/section-04.webp",
   "assets/sections/section-06.webp",
   "assets/sections/section-07.webp",
   "assets/sections/section-08.webp",
   "assets/sections/section-09.webp",
-  "assets/sections/section-10.webp",
-  "assets/sections/section-11.webp",
   "assets/sections/section-12.webp",
   "assets/sections/section-13.webp",
   "assets/sections/section-14.webp",
