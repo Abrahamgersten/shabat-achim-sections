@@ -207,6 +207,7 @@ body.has-selbar { padding-bottom: 88px; }
 }
 .structure-name { font-weight: 800; font-size: 1.08rem; color: var(--heading); }
 .structure-hint { color: var(--ink-soft); font-size: .95rem; }
+.structure-price { color: var(--heading); font-size: .95rem; font-weight: 700; }
 .structure-option input:checked + .structure-card { border-color: var(--navy-2); background: var(--sky-light); }
 .structure-option input:checked + .structure-card::before { border-color: var(--navy-2); box-shadow: inset 0 0 0 5px var(--surface), inset 0 0 0 12px var(--navy-2); }
 .structure-option input:focus-visible + .structure-card { outline: 3px solid var(--focus); outline-offset: 2px; }

@@ -229,7 +229,7 @@
     box.innerHTML = "";
     box.appendChild(el("p", "summary-title", "הבחירה שלכם"));
     var row = el("div", "summary-row");
-    row.appendChild(el("span", "summary-label", "מבנה העלון: " + (state.structure === "tiered" ? D.tiers.tiered : D.tiers.unified)));
+    row.appendChild(el("span", "summary-label", "מבנה העלון: " + (state.structure === "tiered" ? D.tiers.tiered + ", בתוספת 500 ₪ לשנה" : D.tiers.unified)));
     box.appendChild(row);
     activeTiers().forEach(function (t) {
       var r = el("div", "summary-row");
