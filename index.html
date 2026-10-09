@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=9">
+<link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
 
@@ -70,7 +70,7 @@
       <h2 id="howTitle" class="how-title">איך זה עובד?</h2>
       <ol class="how-steps">
         <li><strong>מתרשמים</strong> מהדוגמאות. לחיצה על תמונה מגדילה אותה.</li>
-        <li><strong>מסמנים</strong> עד 4 מדורים, או מדרגים את העלון לפי שכבות גיל.</li>
+        <li><strong>מסמנים</strong> עד 4 מדורים, (או מדרגים את העלון לפי שכבות גיל), ובוחרים לכל מדור את המקום שלו בעלון.</li>
         <li><strong>שולחים</strong> לנו את הבחירה, ואנחנו מעדכנים את העלון שלכם.</li>
       </ol>
     </div>
@@ -94,6 +94,31 @@
             <span class="structure-name">עלון מדורג לפי שכבות גיל</span>
             <span class="structure-hint">עד 4 מדורים לא'-ב', ועד 4 לג'-ו'</span>
             <span class="structure-price">בתוספת 500 ₪ לשנה</span>
+          </span>
+        </label>
+      </div>
+
+      <h3 class="subsection-title" id="layoutTitle">איזה עלון יש לבית הספר?</h3>
+      <p class="section-lede">בחירת סוג העלון מאפשרת להראות לכם סקיצה, ולבחור לכל מדור את המקום שלו בעלון. אפשר גם לבחור מדורים בלי לקבוע מקום, ונשבץ אותם בעצמנו.</p>
+      <div class="structure-choice layout-choice" role="radiogroup" aria-labelledby="layoutTitle">
+        <label class="structure-option">
+          <input type="radio" name="layout" value="portrait">
+          <span class="structure-card layout-card">
+            <span class="layout-icon" data-icon="portrait" aria-hidden="true"></span>
+            <span class="layout-text">
+              <span class="structure-name">עלון עומד</span>
+              <span class="structure-hint">אנכי, שני עמודים לגובה</span>
+            </span>
+          </span>
+        </label>
+        <label class="structure-option">
+          <input type="radio" name="layout" value="landscape">
+          <span class="structure-card layout-card">
+            <span class="layout-icon" data-icon="landscape" aria-hidden="true"></span>
+            <span class="layout-text">
+              <span class="structure-name">עלון שוכב</span>
+              <span class="structure-hint">אופקי, שני עמודים לרוחב</span>
+            </span>
           </span>
         </label>
       </div>
@@ -211,6 +236,24 @@
   </div>
 </dialog>
 
+<dialog class="place-dialog" id="placeDialog" aria-labelledby="pdTitle">
+  <div class="pd-inner">
+    <div class="pd-head">
+      <p class="pd-title" id="pdTitle"></p>
+      <button class="lb-close" type="button" id="pdClose" aria-label="סגירה">×</button>
+    </div>
+    <div class="pd-body" id="pdBody"></div>
+    <div class="pd-foot">
+      <p class="pd-msg" id="pdMsg" aria-live="polite"></p>
+      <div class="pd-actions">
+        <button class="btn btn-primary" type="button" id="pdOk">אישור ובחירת המדור</button>
+        <button class="btn-text" type="button" id="pdNoPref">בחירה בלי להעדיף מיקום</button>
+        <button class="btn-text" type="button" id="pdCancel">ביטול</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <dialog class="ios-dialog" id="iosDialog" aria-labelledby="iosTitle">
   <p class="ios-title" id="iosTitle">התקנה באייפון</p>
   <ol>
@@ -223,7 +266,8 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="js/data.js?v=9"></script>
-<script src="js/app.js?v=9"></script>
+<script src="js/data.js?v=10"></script>
+<script src="js/placement.js?v=10"></script>
+<script src="js/app.js?v=10"></script>
 </body>
 </html>

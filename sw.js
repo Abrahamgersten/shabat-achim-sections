@@ -1,12 +1,13 @@
 /* service worker - בחירת מדורים. Bump VERSION on every deploy so clients pick up the new files. */
 const PREFIX = "shabat-achim-sections-"; // every GitHub Pages site of this account shares one origin: only ever touch our own caches
-const VERSION = PREFIX + "v10";
+const VERSION = PREFIX + "v11";
 const PRECACHE = [
   "./",
   "index.html",
-  "css/style.css?v=9",
-  "js/data.js?v=9",
-  "js/app.js?v=9",
+  "css/style.css?v=10",
+  "js/data.js?v=10",
+  "js/placement.js?v=10",
+  "js/app.js?v=10",
   "manifest.webmanifest?v=3",
   "assets/img/logo.webp",
   "apple-touch-icon.png?v=3",
@@ -18,6 +19,7 @@ const PRECACHE = [
   "assets/sections/sec-or-behaskala-20260930-1.webp",
   "assets/sections/sec-tifzoret-20260930-1.webp",
   "assets/sections/sec-yesh-li-musag-20260930-1.webp",
+  "assets/sections/sec-chida-dvar-torah.webp",
   "assets/sections/section-01.webp",
   "assets/sections/section-02.webp",
   "assets/sections/section-03.webp",

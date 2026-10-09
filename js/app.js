@@ -49,17 +49,39 @@
     });
     return out;
   }
+  function placeToLink(place) {
+    var out = {};
+    ["u", "y", "o"].forEach(function (t) {
+      var m = {};
+      Object.keys(place[t] || {}).forEach(function (k) { m[k] = [place[t][k].pos, place[t][k].v || ""]; });
+      out[t] = m;
+    });
+    return out;
+  }
+  function placeFromLink(layout, keysByTier, p) {
+    var out = { u: {}, y: {}, o: {} };
+    ["u", "y", "o"].forEach(function (t) {
+      var raw = {};
+      Object.keys((p && p[t]) || {}).forEach(function (k) { raw[k] = { pos: p[t][k][0], v: p[t][k][1] || undefined }; });
+      out[t] = Placement.cleanPlaces(layout, keysByTier[t], raw);
+    });
+    return out;
+  }
   function snapshotToLink(s) {
-    return { v: 1, i: s.id, s: s.school, n: s.contactName,
-      t: s.structure === "tiered" ? "t" : "u", u: s.u, y: s.y, o: s.o, d: s.sentAt };
+    return { v: 2, i: s.id, s: s.school, n: s.contactName,
+      t: s.structure === "tiered" ? "t" : "u", u: s.u, y: s.y, o: s.o, d: s.sentAt,
+      l: s.layout || "", p: placeToLink(s.place || { u: {}, y: {}, o: {} }) };
   }
   function linkToSnapshot(o) {
-    if (!o || o.v !== 1) return null;
-    return {
+    if (!o || (o.v !== 1 && o.v !== 2)) return null;
+    var snap = {
       id: String(o.i || ""), school: String(o.s || ""), contactName: String(o.n || ""),
       structure: o.t === "t" ? "tiered" : "unified",
-      u: cleanKeys(o.u), y: cleanKeys(o.y), o: cleanKeys(o.o), sentAt: String(o.d || "")
+      u: cleanKeys(o.u), y: cleanKeys(o.y), o: cleanKeys(o.o), sentAt: String(o.d || ""),
+      layout: Placement.layouts.indexOf(o.l) >= 0 ? o.l : ""
     };
+    snap.place = placeFromLink(snap.layout, { u: snap.u, y: snap.y, o: snap.o }, o.p);
+    return snap;
   }
   function personalUrl(snapshot) {
     return location.origin + location.pathname + "#s=" + b64urlEncode(snapshotToLink(snapshot));
@@ -96,11 +118,17 @@
   var base = store.draft || lastSent;
   var state = {
     structure: base && base.structure === "tiered" ? "tiered" : "unified",
-    u: cleanKeys(base && base.u), y: cleanKeys(base && base.y), o: cleanKeys(base && base.o)
+    u: cleanKeys(base && base.u), y: cleanKeys(base && base.y), o: cleanKeys(base && base.o),
+    layout: base && Placement.layouts.indexOf(base.layout) >= 0 ? base.layout : "",
+    place: { u: {}, y: {}, o: {} }
   };
+  state.place = placeFromLink(state.layout, { u: state.u, y: state.y, o: state.o }, base && base.place ? placeToLink(base.place) : null);
+
+  function copyPlace(p) { return placeFromLink(state.layout, { u: state.u, y: state.y, o: state.o }, placeToLink(p)); }
 
   function persistDraft() {
-    store.draft = { structure: state.structure, u: state.u.slice(), y: state.y.slice(), o: state.o.slice() };
+    store.draft = { structure: state.structure, u: state.u.slice(), y: state.y.slice(), o: state.o.slice(),
+      layout: state.layout, place: copyPlace(state.place) };
     store.profile = profile;
     store.lastSent = lastSent;
     saveStore(store);
@@ -177,6 +205,10 @@
         var actions = el("div", "sec-actions");
         actions.appendChild(makePickButtons(s, false));
         body.appendChild(actions);
+        var pinfo = el("div", "sec-placeinfo");
+        pinfo.setAttribute("data-for", s.key);
+        pinfo.hidden = true;
+        body.appendChild(pinfo);
 
         card.appendChild(thumb);
         card.appendChild(body);
@@ -219,6 +251,14 @@
       var prefix = t === "u" ? "" : TIER_SHORT[t] + ": ";
       if (added.length) parts.push(prefix + "נוספו " + namesOf(added).join(", ") + ".");
       if (removed.length) parts.push(prefix + "הוסרו " + namesOf(removed).join(", ") + ".");
+      if (lastSent.structure === state.structure && state.layout) {
+        state[t].forEach(function (k) {
+          if (before.indexOf(k) < 0) return;
+          var a = lastSent.place && lastSent.place[t] && lastSent.place[t][k], b = state.place[t][k];
+          var as = a ? a.pos + "/" + (a.v || "") : "", bs = b ? b.pos + "/" + (b.v || "") : "";
+          if (as !== bs) parts.push(prefix + "המיקום של " + byKey[k].name + " השתנה" + (b ? " ל" + Placement.describePick(state.layout, k, b) : " (בלי העדפת מיקום)") + ".");
+        });
+      }
     });
     if (!parts.length) return "זו בדיוק הבחירה ששלחתם בפעם הקודמת. אפשר לשנות מדורים למעלה ולשלוח שוב.";
     return "שינויים מהבחירה הקודמת: " + parts.join(" ");
@@ -231,13 +271,28 @@
     var row = el("div", "summary-row");
     row.appendChild(el("span", "summary-label", "מבנה העלון: " + (state.structure === "tiered" ? D.tiers.tiered + ", בתוספת 500 ₪ לשנה" : D.tiers.unified)));
     box.appendChild(row);
+    if (state.layout) {
+      var lr = el("div", "summary-row");
+      lr.appendChild(el("span", "summary-label", "סוג העלון: " + Placement.layoutLabel(state.layout)));
+      box.appendChild(lr);
+    }
     activeTiers().forEach(function (t) {
       var r = el("div", "summary-row");
       r.appendChild(el("span", "summary-label", t === "u" ? "מדורים:" : "מדורים ל" + TIER_LABEL[t] + ":"));
       if (state[t].length) {
         var ul = el("ul", "summary-chips");
-        namesOf(state[t]).forEach(function (n) { ul.appendChild(el("li", null, n)); });
+        state[t].forEach(function (k) {
+          var pl = state.place[t][k];
+          var li = el("li", pl ? "has-place" : null);
+          li.appendChild(el("strong", null, byKey[k].name));
+          if (pl) li.appendChild(el("span", "chip-place", Placement.describePick(state.layout, k, pl)));
+          ul.appendChild(li);
+        });
         r.appendChild(ul);
+        var fills = Placement.autoFills(state.layout, picksOf(t, null));
+        Object.keys(fills).forEach(function (pos) {
+          r.appendChild(el("p", "summary-note", Placement.positionName(state.layout, pos) + ": " + fills[pos] + " (אוטומטי)."));
+        });
       } else {
         r.appendChild(el("p", "summary-empty", "עדיין לא נבחרו. אפשר לשלוח כך, ונשמח לעזור לבחור."));
       }
@@ -273,6 +328,8 @@
       card.classList.toggle("is-picked", picked);
     });
     document.querySelectorAll('input[name="structure"]').forEach(function (r) { r.checked = r.value === state.structure; });
+    document.querySelectorAll('input[name="layout"]').forEach(function (r) { r.checked = r.value === state.layout; });
+    renderPlaceInfo();
     $("catalogLede").textContent = state.structure === "tiered"
       ? "כל הדוגמאות לקוחות מעלונים שהפקנו לבתי ספר. לחצו על תמונה כדי להגדיל אותה. בכל מדור בחרו לאיזו שכבה הוא מתאים: א'-ב', ג'-ו', או לשתיהן."
       : "כל הדוגמאות לקוחות מעלונים שהפקנו לבתי ספר. לחצו על תמונה כדי להגדיל אותה, ועל \"בחירה\" כדי לסמן מדור.";
@@ -296,15 +353,35 @@
         toast((tier === "u" ? "" : "ב" + TIER_SHORT[tier] + " ") + "אפשר לבחור עד " + MAX + " מדורים. כדי להוסיף את " + byKey[key].name + ", הסירו קודם מדור אחר.");
         return;
       }
-      arr.push(key);
-      if (btn) {
-        btn.classList.remove("just-picked");
-        void btn.offsetWidth;
-        btn.classList.add("just-picked");
-      }
+      openPlaceDialog(key, tier, btn, false);
+      return;
     }
+    delete state.place[tier][key];
     persistDraft();
     sync();
+  }
+
+  /* ---------------- where in the newsletter: info line on the card ---------------- */
+  function renderPlaceInfo() {
+    document.querySelectorAll(".sec-placeinfo").forEach(function (box) {
+      var key = box.getAttribute("data-for");
+      box.innerHTML = "";
+      var tiers = activeTiers().filter(function (t) { return state[t].indexOf(key) >= 0; });
+      box.hidden = !tiers.length;
+      tiers.forEach(function (t) {
+        var row = el("div", "placeinfo-row");
+        var pl = state.place[t][key];
+        var txt = (t === "u" ? "" : TIER_SHORT[t] + ": ") + (pl ? "מיקום: " + Placement.describePick(state.layout, key, pl) : "בלי העדפת מיקום");
+        row.appendChild(el("span", "placeinfo-text", txt));
+        var b = el("button", "btn-text placeinfo-edit", pl ? "שינוי מיקום" : "קביעת מיקום");
+        b.type = "button";
+        b.setAttribute("data-key", key);
+        b.setAttribute("data-tier", t);
+        b.setAttribute("aria-label", (pl ? "שינוי מיקום" : "קביעת מיקום") + ": " + byKey[key].name);
+        row.appendChild(b);
+        box.appendChild(row);
+      });
+    });
   }
 
   document.addEventListener("click", function (e) {
@@ -313,6 +390,8 @@
       toggle(pick.getAttribute("data-key"), pick.getAttribute("data-tier"), pick);
       return;
     }
+    var edit = e.target.closest(".placeinfo-edit");
+    if (edit) { openPlaceDialog(edit.getAttribute("data-key"), edit.getAttribute("data-tier"), edit, true); return; }
     var opener = e.target.closest("[data-open]");
     if (opener) openLightbox(opener.getAttribute("data-open"), parseInt(opener.getAttribute("data-idx") || "0", 10), opener);
   });
@@ -325,9 +404,12 @@
       if (prev !== "tiered" && state.structure === "tiered" && !state.y.length && !state.o.length && state.u.length) {
         state.y = state.u.slice();
         state.o = state.u.slice();
+        state.place.y = JSON.parse(JSON.stringify(state.place.u));
+        state.place.o = JSON.parse(JSON.stringify(state.place.u));
         toast("העתקנו את הבחירה שלכם לשתי השכבות. עכשיו אפשר לשנות לכל שכבה בנפרד.");
       } else if (state.structure === "unified" && !state.u.length && (state.y.length || state.o.length)) {
         state.u = cleanKeys(state.y.concat(state.o));
+        state.place.u = Placement.cleanPlaces(state.layout, state.u, Object.assign({}, state.place.o, state.place.y));
         toast("הבחירות מהשכבות אוחדו לעלון אחד, עד " + MAX + " מדורים.");
       }
       persistDraft();
@@ -382,6 +464,179 @@
     lbKey = null;
   });
 
+  /* ---------------- placement dialog: where in the newsletter does this section go? ---------------- */
+  var pdEl = $("placeDialog"), pd = null, pdReturn = null;
+
+  function picksOf(tier, exceptKey) {
+    var out = {};
+    state[tier].forEach(function (k) {
+      if (k !== exceptKey && state.place[tier][k]) out[k] = state.place[tier][k];
+    });
+    return out;
+  }
+
+  function openPlaceDialog(key, tier, from, editing) {
+    var cur = state.place[tier][key] || null;
+    pd = { key: key, tier: tier, editing: editing, pos: cur ? cur.pos : "", v: cur && cur.v ? cur.v : "", step: state.layout ? "place" : "layout" };
+    pdReturn = from || null;
+    drawPlaceDialog();
+    if (typeof pdEl.showModal === "function") pdEl.showModal(); else pdEl.setAttribute("open", "");
+    $("pdClose").focus();
+  }
+
+  function drawPlaceDialog() {
+    var s = byKey[pd.key];
+    var tierTxt = pd.tier === "u" ? "" : " (" + TIER_LABEL[pd.tier] + ")";
+    $("pdTitle").textContent = pd.step === "layout" ? "איזה עלון יש לכם?" : "היכן למקם את " + s.name + "?" + tierTxt;
+    var body = $("pdBody");
+    body.innerHTML = "";
+    var ok = $("pdOk"), nopref = $("pdNoPref"), msg = $("pdMsg");
+    msg.textContent = "";
+
+    if (pd.step === "layout") {
+      body.appendChild(el("p", "pd-intro", "כדי להראות לכם את המקומות האפשריים, ספרו לנו איזה עלון יש לבית הספר. אפשר לשנות את זה אחר כך."));
+      var row = el("div", "pd-layouts");
+      Placement.layouts.forEach(function (id) {
+        var b = el("button", "pd-layout");
+        b.type = "button";
+        b.appendChild(Placement.miniIcon(id));
+        b.appendChild(el("span", "pd-layout-name", Placement.rules.layouts[id].label));
+        b.appendChild(el("span", "pd-layout-hint", Placement.rules.layouts[id].hint));
+        b.addEventListener("click", function () { setLayout(id); pd.pos = ""; pd.v = ""; pd.step = "place"; drawPlaceDialog(); });
+        row.appendChild(b);
+      });
+      body.appendChild(row);
+      ok.hidden = true; nopref.hidden = true;
+      return;
+    }
+
+    ok.hidden = false; nopref.hidden = false;
+    var picks = picksOf(pd.tier, pd.key);
+    var ev = Placement.evaluate(state.layout, pd.key, picks);
+    var anyOk = Object.keys(ev).some(function (id) { return ev[id].ok; }) || !!pd.pos;
+    var head = el("div", "pd-top");
+    head.appendChild(el("p", "pd-intro", anyOk
+      ? "זו סקיצה פשוטה של " + Placement.layoutLabel(state.layout) + ". לחצו על המקום שבו תרצו שהמדור יופיע."
+      : "אין כרגע מקום פנוי שמתאים למדור הזה בעלון."));
+    var other = state.layout === "landscape" ? "portrait" : "landscape";
+    var sw = el("button", "btn-text pd-switch", "זה לא העלון שלכם? מעבר ל" + Placement.layoutLabel(other));
+    sw.type = "button";
+    sw.addEventListener("click", function () { setLayout(other); pd.pos = ""; pd.v = ""; drawPlaceDialog(); });
+    head.appendChild(sw);
+    body.appendChild(head);
+
+    body.appendChild(Placement.buildSketch({
+      layout: state.layout, picks: picks, forKey: pd.key,
+      current: pd.pos ? { pos: pd.pos, v: pd.v } : null,
+      onPick: function (id) {
+        pd.pos = id;
+        var vs = ev[id].variants;
+        pd.v = vs ? (pd.v && vs.some(function (x) { return x.id === pd.v && x.ok; }) ? pd.v : "") : "";
+        drawPlaceDialog();
+        var z = body.querySelector('[data-pos="' + id + '"]');
+        if (z) z.focus();
+      }
+    }));
+
+    var legend = el("ul", "sk-legend");
+    [["is-open", "מקום פנוי שאפשר לבחור"], ["is-current", "המקום שבחרתם"], ["is-taken", "תפוס במדור אחר שבחרתם"], ["is-auto", "מתמלא אוטומטית"], ["is-off", "לא מתאים למדור הזה"]].forEach(function (x) {
+      var li = el("li");
+      li.appendChild(el("span", "sk-key " + x[0]));
+      li.appendChild(document.createTextNode(x[1]));
+      legend.appendChild(li);
+    });
+    body.appendChild(legend);
+
+    // why a place is not available (not only a tooltip: touch screens have none)
+    var why = [];
+    Object.keys(ev).forEach(function (id) {
+      var r = ev[id];
+      if (!r.ok && r.reason && pd.pos !== id && !r.generic && r.reason.indexOf("תפוס") !== 0) why.push(Placement.positionName(state.layout, id) + ": " + r.reason + ".");
+    });
+    if (why.length) {
+      var w = el("ul", "pd-why");
+      why.forEach(function (t) { w.appendChild(el("li", null, t)); });
+      body.appendChild(w);
+    }
+
+    // variants (זה קרה באמת in the big frame)
+    var needV = !!(pd.pos && ev[pd.pos] && ev[pd.pos].variants);
+    if (needV) {
+      var box = el("fieldset", "pd-variants");
+      box.appendChild(el("legend", null, "איזו גרסה של " + s.name + "?"));
+      ev[pd.pos].variants.forEach(function (v) {
+        var lab = el("label", "pd-variant" + (v.ok ? "" : " is-off"));
+        var inp = el("input");
+        inp.type = "radio"; inp.name = "pdvariant"; inp.value = v.id; inp.disabled = !v.ok; inp.checked = pd.v === v.id;
+        inp.addEventListener("change", function () { pd.v = v.id; drawPlaceDialog(); });
+        var t = el("span", "pd-variant-text");
+        t.appendChild(el("strong", null, v.label));
+        t.appendChild(el("span", null, " - " + v.hint));
+        if (!v.ok) t.appendChild(el("em", null, v.reason));
+        lab.appendChild(inp); lab.appendChild(t);
+        box.appendChild(lab);
+      });
+      body.appendChild(box);
+    }
+
+    // what the choice means
+    if (pd.pos) {
+      var line = Placement.describePick(state.layout, pd.key, { pos: pd.pos, v: pd.v });
+      var extra = "";
+      if (state.layout === "landscape" && pd.pos === "L3" && pd.key === "misaviv") extra = " שאלות הדיון של מסביב לשולחן ימלאו באופן אוטומטי את המדור הקטן (עמוד 2, בצד שמאל למעלה).";
+      if (state.layout === "landscape" && pd.pos === "L3" && pd.key !== "misaviv" && pd.v !== "long") extra = " בתחתית המדור הגדול יישאר מקום פנוי, ואפשר לשבץ בו מלתא דבדיחותא או חידות בתמונות.";
+      msg.textContent = "נבחר: " + line + "." + extra;
+    } else if (anyOk) {
+      msg.textContent = "עדיין לא בחרתם מקום.";
+    }
+    ok.disabled = !pd.pos || (needV && !pd.v);
+    ok.textContent = pd.editing ? "שמירת המיקום" : "אישור ובחירת המדור";
+    nopref.textContent = pd.editing ? "ביטול המיקום (בלי העדפה)" : "בחירה בלי להעדיף מיקום";
+  }
+
+  function setLayout(id) {
+    if (id === state.layout) return;
+    var had = ["u", "y", "o"].some(function (t) { return Object.keys(state.place[t]).length; });
+    state.layout = id;
+    state.place = { u: {}, y: {}, o: {} };
+    persistDraft();
+    sync();
+    if (had) toast("שיניתם את סוג העלון, ולכן מיקומי המדורים שקבעתם אופסו. המדורים עצמם נשארו.");
+  }
+
+  function commitPlace(withPos) {
+    var key = pd.key, tier = pd.tier;
+    if (state[tier].indexOf(key) < 0) {
+      state[tier].push(key);
+      var btn = document.querySelector('.pick[data-key="' + key + '"][data-tier="' + tier + '"]');
+      if (btn) { btn.classList.remove("just-picked"); void btn.offsetWidth; btn.classList.add("just-picked"); }
+    }
+    if (withPos && pd.pos) {
+      state.place[tier][key] = { pos: pd.pos };
+      if (pd.v) state.place[tier][key].v = pd.v;
+    } else {
+      delete state.place[tier][key];
+    }
+    persistDraft();
+    sync();
+    pdEl.close();
+    toast(withPos && pd.pos ? byKey[key].name + ": " + Placement.describePick(state.layout, key, state.place[tier][key]) + "." : "המדור " + byKey[key].name + " נבחר.");
+  }
+
+  $("pdOk").addEventListener("click", function () { if (!$("pdOk").disabled) commitPlace(true); });
+  $("pdNoPref").addEventListener("click", function () { commitPlace(false); });
+  $("pdCancel").addEventListener("click", function () { pdEl.close(); });
+  $("pdClose").addEventListener("click", function () { pdEl.close(); });
+  pdEl.addEventListener("click", function (e) { if (e.target === pdEl) pdEl.close(); });
+  pdEl.addEventListener("close", function () {
+    if (pdReturn && document.contains(pdReturn)) pdReturn.focus();
+    pd = null;
+  });
+
+  document.querySelectorAll('input[name="layout"]').forEach(function (r) {
+    r.addEventListener("change", function () { if (r.checked) setLayout(r.value); });
+  });
+
   /* ---------------- form ---------------- */
   var form = $("sendForm");
   var FIELDS = [["school", "f_school"], ["contactName", "f_name"]];
@@ -432,6 +687,8 @@
       namesOf(state.u).forEach(function (n) { fd.append(E.sectionsUnified, n); });
     }
     fd.append(E.notes, $("f_notes").value.trim());
+    if (state.layout) fd.append(E.layout, Placement.layoutLabel(state.layout));
+    fd.append(E.placements, JSON.stringify(placementsPayload()));
     fd.append(E.requestKind, lastSent && lastSent.sentAt ? "עדכון בחירה קודמת" : "בחירה ראשונה");
     fd.append(E.schoolId, profile.id);
 
@@ -447,6 +704,20 @@
       });
   });
 
+  /* the machine-readable record: what David's automation reads (no free text to interpret) */
+  function placementsPayload() {
+    var out = { v: 1, layout: state.layout || "", tiers: {} };
+    activeTiers().forEach(function (t) {
+      out.tiers[t] = state[t].map(function (k) {
+        var pl = state.place[t][k];
+        var rec = { key: k, name: byKey[k].name, pos: pl ? pl.pos : "", variant: pl && pl.v ? pl.v : "" };
+        if (pl) rec.where = Placement.describePick(state.layout, k, pl);
+        return rec;
+      });
+    });
+    return out;
+  }
+
   function showError(msg) {
     var errEl = $("formError");
     errEl.textContent = msg;
@@ -458,6 +729,7 @@
     lastSent = {
       id: profile.id, school: $("f_school").value.trim(), contactName: $("f_name").value.trim(),
       structure: state.structure, u: state.u.slice(), y: state.y.slice(), o: state.o.slice(),
+      layout: state.layout, place: copyPlace(state.place),
       sentAt: new Date().toISOString()
     };
     $("f_notes").value = "";
@@ -554,6 +826,7 @@
   }
 
   /* ---------------- boot ---------------- */
+  document.querySelectorAll(".layout-icon").forEach(function (n) { n.appendChild(Placement.miniIcon(n.getAttribute("data-icon"))); });
   renderCatalog();
   showWelcome();
   sync();
