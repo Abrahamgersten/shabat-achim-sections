@@ -552,3 +552,19 @@ body:not(.has-selbar) .toast { bottom: 24px; }
 .sk-zone[data-pos="L3b"] .sk-zsize, .sk-zone[data-pos="P2S"] .sk-zsize { display: none; }
 .sk-zone[data-pos="L3b"], .sk-zone[data-pos="P2S"] { padding: 1px 4px; }
 .sk-zone[data-pos="L4"] .sk-zsize { display: none; }
+
+/* ===== Moving between the Shabat Achim sites (same bar on all three) ===== */
+.sa-nav { background: var(--cream); border-bottom: 1px solid var(--border); }
+.sa-nav ul { list-style: none; margin: 0 auto; padding: 8px 16px 10px; max-width: var(--max-w); display: flex; gap: 6px; }
+.sa-nav li { flex: 1; min-width: 0; }
+.sa-nav a {
+  display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 8px; border-radius: 999px;
+  background: var(--sky-light); color: var(--heading); font-weight: 700; font-size: .92rem; line-height: 1.2;
+  text-align: center; text-decoration: none; transition: background-color 140ms ease;
+}
+.sa-nav a[aria-current="page"] { background: var(--navy); color: #fff; }
+@media (hover: hover) and (pointer: fine) { .sa-nav a:not([aria-current]):hover { background: var(--sky-mid); } }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .sa-nav a[aria-current="page"] { background: var(--yellow); color: var(--navy); }
+}
+@media (min-width: 640px) { .sa-nav ul { padding-inline: 24px; } .sa-nav a { font-size: 1rem; } }

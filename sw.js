@@ -1,10 +1,10 @@
 /* service worker - בחירת מדורים. Bump VERSION on every deploy so clients pick up the new files. */
 const PREFIX = "shabat-achim-sections-"; // every GitHub Pages site of this account shares one origin: only ever touch our own caches
-const VERSION = PREFIX + "v11";
+const VERSION = PREFIX + "v12";
 const PRECACHE = [
   "./",
   "index.html",
-  "css/style.css?v=10",
+  "css/style.css?v=11",
   "js/data.js?v=10",
   "js/placement.js?v=10",
   "js/app.js?v=10",
